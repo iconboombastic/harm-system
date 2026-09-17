@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "HARM - Harmonisasi Dokumen",
+    "slug": "harm-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "harm",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1e40af"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "go.id.acehtamiangkab.harm",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1e40af"
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "NOTIFICATIONS"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        { "photosPermission": "Aplikasi membutuhkan akses ke galeri untuk upload evidence." }
+      ],
+      [
+        "expo-camera",
+        { "cameraPermission": "Aplikasi membutuhkan akses kamera untuk mengambil foto evidence." }
+      ],
+      [
+        "expo-notifications",
+        { "icon": "./assets/notification-icon.png", "color": "#1e40af" }
+      ]
+    ],
+    "extra": {
+      "eas": { "projectId": "your-eas-project-id" },
+      "supabaseUrl": "YOUR_SUPABASE_URL",
+      "supabaseAnonKey": "YOUR_SUPABASE_ANON_KEY"
+    }
+  }
+}

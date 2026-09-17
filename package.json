@@ -1,0 +1,30 @@
+{
+  "name": "harm-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistem Harmonisasi Dokumen Terpadu - Pemerintah Kabupaten Aceh Tamiang",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "db:migrate": "cd packages/database && pnpm run migrate",
+    "db:seed": "cd packages/database && pnpm run seed",
+    "db:reset": "cd packages/database && pnpm run reset",
+    "supabase:start": "npx supabase start",
+    "supabase:stop": "npx supabase stop",
+    "supabase:status": "npx supabase status",
+    "supabase:gen-types": "npx supabase gen types typescript --local > packages/shared/src/types/database.types.ts",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.1.0",
+    "typescript": "^5.5.0",
+    "prettier": "^3.3.0",
+    "eslint": "^9.0.0"
+  },
+  "packageManager": "pnpm@9.6.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
