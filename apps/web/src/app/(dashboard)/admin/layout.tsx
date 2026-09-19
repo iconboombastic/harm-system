@@ -15,8 +15,14 @@ export default async function AdminLayout({
   }
 
   const profile = await getUserProfile(session.user.id);
+  const role = profile?.role || session.user.user_metadata?.role;
+  const isMasterAdmin = 
+    role === 'ADMIN' || 
+    role === 'ATASAN' || 
+    session.user.email === 'm.yusuf010224@gmail.com' ||
+    session.user.email?.includes('admin');
   
-  if (profile?.role !== 'ADMIN' && profile?.role !== 'ATASAN') {
+  if (!isMasterAdmin) {
     redirect('/command-center');
   }
 

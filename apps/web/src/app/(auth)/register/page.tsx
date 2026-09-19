@@ -1,96 +1,49 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { useFormStatus } from 'react-dom';
-import { register } from '@/lib/actions/auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? 'Memproses...' : 'Daftar'}
-    </Button>
-  );
-}
+import { ShieldAlert, FileText, Search, ArrowLeft } from 'lucide-react';
 
 export default function RegisterPage() {
-  const [error, setError] = useState<string | null>(null);
-
-  async function clientAction(formData: FormData) {
-    const result = await register(formData);
-    if (result?.error) {
-      setError(result.error);
-    }
-  }
-
   return (
     <div className="space-y-6">
       <div className="space-y-2 text-center">
-        <h2 className="text-xl font-semibold">Buat Akun Baru</h2>
-        <p className="text-sm text-muted-foreground">Lengkapi data di bawah ini untuk mendaftar</p>
+        <div className="mx-auto w-12 h-12 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mb-2">
+          <ShieldAlert className="w-6 h-6" />
+        </div>
+        <h2 className="text-xl font-semibold">Pendaftaran Akun Mandiri Ditutup</h2>
+        <p className="text-sm text-muted-foreground">
+          Akun internal Bagian Hukum hanya dapat dibuat dan diberikan oleh Administrator Sistem.
+        </p>
       </div>
 
-      {error && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      <div className="rounded-xl border bg-blue-50/60 p-4 text-xs text-blue-900 space-y-2 leading-relaxed">
+        <div className="font-semibold text-sm text-blue-800">📌 Informasi untuk OPD / Pemrakarsa:</div>
+        <p>
+          Bagi perangkat daerah (OPD) atau pihak luar, Anda <strong>tidak perlu membuat akun</strong> untuk mengajukan permohonan ataupun mengunggah berkas perbaikan.
+        </p>
+      </div>
 
-      <form action={clientAction} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="fullName">Nama Lengkap</Label>
-          <Input 
-            id="fullName" 
-            name="fullName" 
-            placeholder="John Doe" 
-            required 
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input 
-            id="email" 
-            name="email" 
-            type="email" 
-            placeholder="nama@acehtamiang.go.id" 
-            required 
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Kata Sandi</Label>
-          <Input 
-            id="password" 
-            name="password" 
-            type="password" 
-            required 
-            minLength={6}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Konfirmasi Kata Sandi</Label>
-          <Input 
-            id="confirmPassword" 
-            name="confirmPassword" 
-            type="password" 
-            required 
-            minLength={6}
-          />
-        </div>
-        
-        <SubmitButton />
-      </form>
+      <div className="space-y-3 pt-2">
+        <Link href="/public-intake" className="block">
+          <Button className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700">
+            <FileText className="w-4 h-4" />
+            Ajukan Permohonan (Portal OPD)
+          </Button>
+        </Link>
 
-      <div className="text-center text-sm">
-        Sudah memiliki akun?{' '}
-        <Link href="/login" className="font-medium text-primary hover:underline">
-          Masuk di sini
+        <Link href="/tracking" className="block">
+          <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+            <Search className="w-4 h-4" />
+            Lacak Status & Upload Perbaikan Dokumen
+          </Button>
+        </Link>
+
+        <Link href="/login" className="block pt-2">
+          <Button variant="ghost" className="w-full flex items-center justify-center gap-2 text-muted-foreground">
+            <ArrowLeft className="w-4 h-4" />
+            Kembali ke Halaman Masuk
+          </Button>
         </Link>
       </div>
     </div>

@@ -88,3 +88,42 @@ export async function verifyIntegrity(versionId: string) {
 export async function getDocumentRequirements(caseId: string) {
   return { success: true, data: [{ name: 'Surat Permohonan', required: true, uploaded: false }] }
 }
+
+export async function linkGoogleDriveDocument(
+  caseId: string,
+  title: string,
+  gdriveUrl: string,
+  category: string = 'SUBSTANSI',
+  type: string = 'PERMOHONAN'
+) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const { data: doc, error: dbError } = await supabase.from('case_documents').insert({
+    case_id: caseId,
+    category,
+    document_type: type,
+    original_filename: title,
+    system_filename: gdriveUrl,
+    storage_path: gdriveUrl,
+    current_version: 1,
+    status: 'ACTIVE',
+    source: 'GOOGLE_DRIVE',
+    created_by: user?.id,
+  }).select().single()
+
+  if (dbError) return { success: false, error: dbError.message }
+
+  await supabase.from('document_versions').insert({
+    document_id: doc.id,
+    version_number: 1,
+    filename: title,
+    storage_path: gdriveUrl,
+    file_size: 0,
+    mime_type: 'application/vnd.google-apps.document',
+    uploaded_by: user?.id,
+  })
+
+  await logAudit('LINK_GDRIVE', 'DOCUMENT', doc.id, null, { gdriveUrl })
+  return { success: true, data: { ...doc, title: doc.original_filename, type: doc.document_type } }
+}

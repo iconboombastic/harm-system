@@ -1,5 +1,32 @@
-import GenericTab from '@/components/GenericTab'
+import { getCaseById } from '@/lib/actions/cases';
+import { createClient } from '@/lib/supabase/server';
+import { getUserProfile } from '@/lib/actions/auth-data';
+import CaseRelationsClient from '@/components/case/case-relations-client';
 
-export default function RelationsTab() {
-  return <GenericTab title="Relasi Permohonan" description="Lihat hubungan permohonan ini dengan dokumen, produk hukum, atau permohonan lain." />
+export default async function RelationsTab({
+  params,
+}: {
+  params: Promise<{ caseId: string }>;
+}) {
+  const { caseId } = await params;
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+
+  let role = 'ADMIN';
+  if (session) {
+    const profile = await getUserProfile(session.user.id);
+    role = profile?.role || session.user.user_metadata?.role || 'ADMIN';
+  }
+
+  const { data: caseData } = await getCaseById(caseId);
+
+  return (
+    <CaseRelationsClient
+      caseId={caseId}
+      caseTitle={caseData?.title}
+      harmNumber={caseData?.harm_number}
+      currentUserRole={role}
+    />
+  );
 }
+

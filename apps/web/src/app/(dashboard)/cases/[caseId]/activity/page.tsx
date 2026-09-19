@@ -1,5 +1,20 @@
-import GenericTab from '@/components/GenericTab'
+import { getCaseById } from '@/lib/actions/cases';
+import CaseActivityClient from '@/components/case/case-activity-client';
 
-export default function ActivityTab() {
-  return <GenericTab title="Log Aktivitas Lengkap" description="Daftar aktivitas mentah (audit trail) untuk semua perubahan yang terjadi di ruang kerja ini." />
+export default async function ActivityTab({
+  params,
+}: {
+  params: Promise<{ caseId: string }>;
+}) {
+  const { caseId } = await params;
+  const { data: caseData } = await getCaseById(caseId);
+
+  return (
+    <CaseActivityClient
+      caseId={caseId}
+      caseTitle={caseData?.title}
+      harmNumber={caseData?.harm_number}
+    />
+  );
 }
+

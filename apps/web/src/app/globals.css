@@ -92,6 +92,120 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.011em;
   }
 }
+
+/* Enterprise Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.enterprise-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.enterprise-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+}
+
+.subtle-grid {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.subtle-grid-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* High-Caliber Enterprise Icon Tile System */
+.icon-tile-azure {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.05));
+  border: 1px solid rgba(147, 197, 253, 0.5);
+  color: #2563eb;
+  box-shadow: 0 2px 6px -1px rgba(37, 99, 235, 0.12);
+}
+
+.icon-tile-amber {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.05));
+  border: 1px solid rgba(252, 211, 77, 0.5);
+  color: #d97706;
+  box-shadow: 0 2px 6px -1px rgba(217, 119, 6, 0.12);
+}
+
+.icon-tile-emerald {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.05));
+  border: 1px solid rgba(110, 231, 183, 0.5);
+  color: #059669;
+  box-shadow: 0 2px 6px -1px rgba(5, 150, 105, 0.12);
+}
+
+.icon-tile-violet {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(109, 40, 217, 0.05));
+  border: 1px solid rgba(196, 181, 253, 0.5);
+  color: #7c3aed;
+  box-shadow: 0 2px 6px -1px rgba(124, 58, 237, 0.12);
+}
+
+.icon-tile-rose {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(225, 29, 72, 0.05));
+  border: 1px solid rgba(253, 164, 175, 0.5);
+  color: #e11d48;
+  box-shadow: 0 2px 6px -1px rgba(225, 29, 72, 0.12);
+}
+
+.icon-tile-sky {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(2, 132, 199, 0.05));
+  border: 1px solid rgba(125, 211, 252, 0.5);
+  color: #0284c7;
+  box-shadow: 0 2px 6px -1px rgba(2, 132, 199, 0.12);
+}
+
+/* Linear-style Bento Grid Card */
+.bento-card {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(203, 213, 225, 1);
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+}
+
+/* Linear Active Indicator Glow */
+.nav-active-indicator {
+  position: relative;
+}
+.nav-active-indicator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  background: #3b82f6;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 8px #3b82f6;
+}
+

@@ -36,10 +36,37 @@ export async function getUsers() {
   return data || [];
 }
 
-export async function createUser(data: any) {
+export async function createUser(data: { email: string; password?: string; name: string; role: string; jabatan?: string; unit?: string }) {
   const auth = await checkAdmin();
   if (auth.error) return { error: auth.error };
   
+  const { data: newUser, error: signUpError } = await auth.supabase!.auth.signUp({
+    email: data.email,
+    password: data.password || 'AcehTamiang2026!',
+    options: {
+      data: {
+        full_name: data.name,
+        role: data.role || 'STAF',
+        jabatan: data.jabatan || '',
+        unit: data.unit || 'Bagian Hukum',
+      },
+    },
+  });
+
+  if (signUpError) return { error: signUpError.message };
+
+  if (newUser?.user) {
+    await auth.supabase!.from('user_profiles').upsert({
+      id: newUser.user.id,
+      name: data.name,
+      role: data.role || 'STAF',
+      jabatan: data.jabatan || '',
+      unit: data.unit || 'Bagian Hukum',
+      is_active: true,
+    });
+  }
+
+  revalidatePath('/admin/users');
   return { success: true };
 }
 
@@ -131,5 +158,35 @@ export async function getSystemHealth() {
     auth: 'SEHAT',
     queue: 'PERINGATAN',
     lastChecked: new Date().toISOString()
+  };
+}
+
+export async function exportDatabaseBackup() {
+  const supabase = await createClient();
+  
+  const [cases, intake, profiles, opds, docs, tasks, audit] = await Promise.all([
+    supabase.from('cases').select('*'),
+    supabase.from('intake_submissions').select('*'),
+    supabase.from('user_profiles').select('*'),
+    supabase.from('opd_units').select('*'),
+    supabase.from('case_documents').select('*'),
+    supabase.from('case_tasks').select('*'),
+    supabase.from('audit_trail').select('*').limit(500),
+  ]);
+
+  return {
+    success: true,
+    timestamp: new Date().toISOString(),
+    system: 'HARM - Sistem Harmonisasi Dokumen Terpadu Kabupaten Aceh Tamiang',
+    database_version: '1.0',
+    data: {
+      cases: cases.data || [],
+      intake_submissions: intake.data || [],
+      user_profiles: profiles.data || [],
+      opd_units: opds.data || [],
+      case_documents: docs.data || [],
+      case_tasks: tasks.data || [],
+      audit_trail: audit.data || [],
+    }
   };
 }

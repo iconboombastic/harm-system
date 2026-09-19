@@ -4,14 +4,17 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function submitPublicIntake(formData: FormData) {
   const supabase = await createClient();
-  const opd_name = formData.get('opd_name') as string;
+  const opd_name = (formData.get('opd_name') || formData.get('opd')) as string;
   const applicant_name = formData.get('applicant_name') as string;
-  const applicant_email = formData.get('applicant_email') as string;
-  const applicant_phone = formData.get('applicant_phone') as string;
-  const document_type = formData.get('document_type') as string;
+  const applicant_email = (formData.get('applicant_email') || formData.get('email')) as string;
+  const applicant_phone = (formData.get('applicant_phone') || '') as string;
+  const document_type = (formData.get('document_type') || 'PERBUP') as string;
   const title = formData.get('title') as string;
-  const nomor_surat = formData.get('nomor_surat') as string;
-  const description = formData.get('description') as string;
+  const nomor_surat = (formData.get('nomor_surat') || '') as string;
+  const rawDesc = (formData.get('description') || '') as string;
+  const gdrive_link = formData.get('gdrive_link') as string;
+
+  const description = gdrive_link ? `${rawDesc}\n\n[Google Drive Berkas]: ${gdrive_link}` : rawDesc;
 
   const token = 'TRK-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
