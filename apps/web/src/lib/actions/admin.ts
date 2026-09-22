@@ -190,3 +190,109 @@ export async function exportDatabaseBackup() {
     }
   };
 }
+
+// Workflow Templates Actions
+export async function getWorkflowTemplates() {
+  const auth = await checkAdmin();
+  if (auth.error) return [];
+  
+  const { data } = await auth.supabase!
+    .from('workflow_templates')
+    .select('*')
+    .order('created_at', { ascending: true });
+    
+  return data || [];
+}
+
+export async function saveWorkflowTemplate(template: {
+  id?: string;
+  name: string;
+  document_type: string;
+  description: string;
+  stages: any[];
+  is_active?: boolean;
+}) {
+  const auth = await checkAdmin();
+  if (auth.error) return { error: auth.error };
+
+  if (template.id) {
+    const { error } = await auth.supabase!
+      .from('workflow_templates')
+      .update({
+        name: template.name,
+        document_type: template.document_type,
+        description: template.description,
+        stages: template.stages,
+        is_active: template.is_active ?? true,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', template.id);
+    if (error) return { error: error.message };
+  } else {
+    const { error } = await auth.supabase!
+      .from('workflow_templates')
+      .insert({
+        name: template.name,
+        document_type: template.document_type,
+        description: template.description,
+        stages: template.stages,
+        is_active: template.is_active ?? true,
+      });
+    if (error) return { error: error.message };
+  }
+
+  revalidatePath('/admin/workflows');
+  return { success: true };
+}
+
+export async function deleteWorkflowTemplate(id: string) {
+  const auth = await checkAdmin();
+  if (auth.error) return { error: auth.error };
+  const { error } = await auth.supabase!
+    .from('workflow_templates')
+    .delete()
+    .eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/admin/workflows');
+  return { success: true };
+}
+
+// SLA Config Actions
+export async function getSlaConfigs() {
+  const auth = await checkAdmin();
+  if (auth.error) return [];
+
+  const { data } = await auth.supabase!
+    .from('sla_configs')
+    .select('*')
+    .order('document_type');
+
+  return data || [];
+}
+
+export async function saveSlaConfig(config: {
+  document_type: string;
+  stage: string;
+  duration_hours: number;
+  duration_type?: string;
+  warning_threshold_percent?: number;
+}) {
+  const auth = await checkAdmin();
+  if (auth.error) return { error: auth.error };
+
+  const { error } = await auth.supabase!
+    .from('sla_configs')
+    .upsert({
+      document_type: config.document_type,
+      stage: config.stage,
+      duration_hours: config.duration_hours,
+      duration_type: config.duration_type || 'WORKING_HOURS',
+      warning_threshold_percent: config.warning_threshold_percent || 80,
+      is_active: true,
+    }, { onConflict: 'document_type,stage' });
+
+  if (error) return { error: error.message };
+  revalidatePath('/admin/sla');
+  return { success: true };
+}
+

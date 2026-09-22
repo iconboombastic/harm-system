@@ -46,11 +46,13 @@ export default async function CommandCenterPage() {
   ]);
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Command Center</h2>
-      </div>
-      <Suspense fallback={<div>Memuat dashboard...</div>}>
+    <div className="space-y-6">
+      <Suspense fallback={
+        <div className="p-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
+          <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-3" />
+          <p className="text-xs font-semibold">Memuat Command Center...</p>
+        </div>
+      }>
         {role === 'STAF' && (
           <StafDashboard 
             initialNotes={stickyNotes} 
